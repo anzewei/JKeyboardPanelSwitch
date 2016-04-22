@@ -16,6 +16,7 @@
 package cn.dreamtobe.kpswitch.util;
 
 import android.app.Activity;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,14 @@ public class ViewUtil {
     public static boolean isFullScreen(final Activity activity) {
         return (activity.getWindow().getAttributes().flags &
                 WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
+    }
+
+    public static boolean isTranslucentStatus(final Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return (activity.getWindow().getAttributes().flags &
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) != 0;
+        }
+        return false;
     }
 
 }

@@ -146,8 +146,9 @@ public class KeyboardUtil {
                               /** Nullable **/OnKeyboardShowingListener listener) {
         final ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
         boolean fullScreen = ViewUtil.isFullScreen(activity);
+        boolean isTranslucentStatus = ViewUtil.isTranslucentStatus(activity);
         contentView.getViewTreeObserver().
-                addOnGlobalLayoutListener(new KeyboardStatusListener(fullScreen, contentView,
+                addOnGlobalLayoutListener(new KeyboardStatusListener(fullScreen,isTranslucentStatus, contentView,
                         target, listener));
     }
 
@@ -165,15 +166,17 @@ public class KeyboardUtil {
         private final ViewGroup contentView;
         private final IPanelHeightTarget panelHeightTarget;
         private final boolean isFullScreen;
+        private final boolean isTranslucentStatus;
         private final int statusBarHeight;
         private boolean lastKeyboardShowing;
         private final OnKeyboardShowingListener keyboardShowingListener;
 
-        KeyboardStatusListener(boolean isFullScreen, ViewGroup contentView,
+        KeyboardStatusListener(boolean isFullScreen,boolean isTranslucentStatus, ViewGroup contentView,
                                IPanelHeightTarget panelHeightTarget, OnKeyboardShowingListener listener) {
             this.contentView = contentView;
             this.panelHeightTarget = panelHeightTarget;
             this.isFullScreen = isFullScreen;
+            this.isTranslucentStatus = isTranslucentStatus;
             this.statusBarHeight = StatusBarHeightUtil.getStatusBarHeight(contentView.getContext());
             this.keyboardShowingListener = listener;
         }
@@ -268,7 +271,7 @@ public class KeyboardUtil {
             } else {
 
                 final int phoneDisplayHeight = contentView.getResources().getDisplayMetrics().heightPixels;
-                if (phoneDisplayHeight == actionBarOverlayLayoutHeight) {
+                if (!isTranslucentStatus && phoneDisplayHeight == actionBarOverlayLayoutHeight) {
                     // no space to settle down the status bar, switch to fullscreen,
                     // only in the case of paused and opened the fullscreen page.
                     Log.w(TAG, String.format("skip the keyboard status calculate, the current" +
