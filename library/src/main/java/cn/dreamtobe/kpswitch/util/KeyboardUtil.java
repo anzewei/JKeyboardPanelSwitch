@@ -282,16 +282,15 @@ public class KeyboardUtil {
 
                 }
 
+                Rect r = new Rect();
+                actionBarOverlayLayout.getWindowVisibleDisplayFrame(r);
+                int maxHeight = r.height();//最大高度应该是可见区域的
                 if (maxOverlayLayoutHeight == 0) {
                     // non-used.
                     isKeyboardShowing = lastKeyboardShowing;
-                }else if (displayHeight >= maxOverlayLayoutHeight) {
-                    isKeyboardShowing = false;
-                } else {
-                    isKeyboardShowing = true;
-                }
+                } else isKeyboardShowing = displayHeight < maxOverlayLayoutHeight;
 
-                maxOverlayLayoutHeight = Math.max(maxOverlayLayoutHeight, actionBarOverlayLayoutHeight);
+                maxOverlayLayoutHeight = Math.max(maxOverlayLayoutHeight, maxHeight);
             }
 
             if (lastKeyboardShowing != isKeyboardShowing) {
